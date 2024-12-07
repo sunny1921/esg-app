@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "866664101272",
+    "project_id": "esg-post-app",
+    "storage_bucket": "esg-post-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866664101272:android:630a4e6fd64f2bdd48a7ed",
+        "android_client_info": {
+          "package_name": "com.indianpost.esg.esg_post_office"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRVpZ5XK1XRJTUfGwVExICa4Z_Z-aJdMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
