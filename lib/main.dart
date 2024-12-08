@@ -49,26 +49,33 @@ class MyApp extends ConsumerWidget {
             );
           },
         ),
-        bottomNavigationBar: showBottomNav ? BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (index) => ref.read(navigationProvider.notifier).setIndex(index),
-          selectedItemColor: const Color(0xFF1B5E20),
-          unselectedItemColor: Colors.grey,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: 'Dashboard',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.analytics),
-              label: 'Analytics',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Notifications',
-            ),
-          ],
-        ) : null,
+        bottomNavigationBar: showBottomNav
+            ? BottomNavigationBar(
+                currentIndex: currentIndex,
+                onTap: (index) =>
+                    ref.read(navigationProvider.notifier).setIndex(index),
+                selectedItemColor: const Color(0xFF1B5E20),
+                unselectedItemColor: Colors.grey,
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.dashboard),
+                    label: 'Dashboard',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.scale),
+                    label: 'Record',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.notifications),
+                    label: 'Notifications',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.energy_savings_leaf),
+                    label: 'Carbon Credits',
+                  ),
+                ],
+              )
+            : null,
       ),
     );
   }

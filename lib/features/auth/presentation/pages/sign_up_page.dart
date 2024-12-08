@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:esg_post_office/features/auth/presentation/pages/complete_profile_page.dart';
 import 'package:esg_post_office/features/auth/presentation/providers/auth_provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esg_post_office/features/auth/domain/models/post_office_model.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
@@ -17,10 +21,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _mobileController = TextEditingController();
-  final _postOfficeIdController = TextEditingController();
+
   final _pincodeController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  List<PostOfficeModel> _postOffices = [];
+  PostOfficeModel? _selectedPostOffice;
+  bool _isLoadingPostOffices = false;
 
   @override
   void initState() {
@@ -35,23 +42,83 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     _nameController.dispose();
     _emailController.dispose();
     _mobileController.dispose();
-    _postOfficeIdController.dispose();
+
     _pincodeController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
+  Future<void> _fetchPostOffices(String pincode) async {
+    if (pincode.length != 6) return;
+
+    setState(() {
+      _isLoadingPostOffices = true;
+      _postOffices = [];
+      _selectedPostOffice = null;
+    });
+
+    try {
+      final response = await http.get(
+        Uri.parse('https://api.postalpincode.in/pincode/$pincode'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        if (data.isNotEmpty && data[0]['Status'] == 'Success') {
+          final postOffices = (data[0]['PostOffice'] as List)
+              .map((po) => PostOfficeModel.fromJson(po))
+              .toList();
+
+          setState(() {
+            _postOffices = postOffices;
+          });
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching post offices: $e')),
+      );
+    } finally {
+      setState(() => _isLoadingPostOffices = false);
+    }
+  }
+
+  Future<void> _savePostOfficeToFirestore(PostOfficeModel postOffice) async {
+    final firestore = FirebaseFirestore.instance;
+    final docId = '${postOffice.pincode}${postOffice.name}';
+
+    try {
+      final docRef = firestore.collection('postOffices').doc(docId);
+      final doc = await docRef.get();
+
+      if (!doc.exists) {
+        await docRef.set(postOffice.toJson());
+      }
+    } catch (e) {
+      print('Error saving post office: $e');
+    }
+  }
+
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
+    if (_selectedPostOffice == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a post office')),
+      );
+      return;
+    }
 
     setState(() => _isLoading = true);
 
     try {
+      await _savePostOfficeToFirestore(_selectedPostOffice!);
+
       await ref.read(authStateProvider.notifier).signUp(
             name: _nameController.text.trim(),
             email: _emailController.text.trim(),
             mobile: _mobileController.text.trim(),
-            postOfficeId: _postOfficeIdController.text.trim(),
+            postOfficeId:
+                '${_selectedPostOffice!.pincode}${_selectedPostOffice!.name}',
             pincode: _pincodeController.text.trim(),
             password: _passwordController.text,
           );
@@ -136,26 +203,13 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               ),
               const SizedBox(height: 16),
               TextFormField(
-                controller: _postOfficeIdController,
-                decoration: const InputDecoration(
-                  labelText: 'Post Office ID',
-                  prefixIcon: Icon(Icons.location_city),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your post office ID';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
                 controller: _pincodeController,
                 decoration: const InputDecoration(
                   labelText: 'Pincode',
                   prefixIcon: Icon(Icons.pin_drop),
                 ),
                 keyboardType: TextInputType.number,
+                onChanged: (value) => _fetchPostOffices(value),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your pincode';
@@ -166,6 +220,31 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
+              if (_isLoadingPostOffices)
+                const Center(child: CircularProgressIndicator())
+              else if (_postOffices.isNotEmpty)
+                DropdownButtonFormField<PostOfficeModel>(
+                  decoration: const InputDecoration(
+                    labelText: 'Select Post Office',
+                    prefixIcon: Icon(Icons.location_city),
+                  ),
+                  value: _selectedPostOffice,
+                  items: _postOffices
+                      .map((po) => DropdownMenuItem(
+                            value: po,
+                            child: Text(po.name),
+                          ))
+                      .toList(),
+                  onChanged: (value) =>
+                      setState(() => _selectedPostOffice = value),
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a post office';
+                    }
+                    return null;
+                  },
+                ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
