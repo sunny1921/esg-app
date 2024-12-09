@@ -385,12 +385,46 @@ class _CarbonCreditsPageState extends ConsumerState<CarbonCreditsPage> {
                       ),
                 ),
                 const SizedBox(height: 16),
-                LinearProgressIndicator(
-                  value: (user.carbonCredits ?? 0) /
-                      10, // Assuming 10 is the target
-                  backgroundColor: Colors.grey[200],
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(Color(0xFF1B5E20)),
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: 150,
+                        width: 150,
+                        child: CircularProgressIndicator(
+                          value: (user.carbonCredits ?? 0) /
+                              (carbonFootprint / 1000),
+                          backgroundColor: Colors.grey[200],
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              Color(0xFF1B5E20)),
+                          strokeWidth: 12,
+                        ),
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '${((user.carbonCredits ?? 0) / (carbonFootprint / 1000) * 100).toStringAsFixed(1)}%',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF1B5E20),
+                                ),
+                          ),
+                          const Text(
+                            'Progress',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 16),
                 _buildImpactRow(
@@ -415,22 +449,36 @@ class _CarbonCreditsPageState extends ConsumerState<CarbonCreditsPage> {
         Card(
           elevation: 4,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Earn Carbon Credits',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.eco,
+                      color: Color(0xFF1B5E20),
+                      size: 28,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Earn Atoms',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
+                      child: _buildEarnOptionCard(
+                        context,
+                        icon: Icons.directions_walk,
+                        title: 'Walk & Earn',
+                        subtitle: 'Earn atoms by walking to work',
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -438,18 +486,16 @@ class _CarbonCreditsPageState extends ConsumerState<CarbonCreditsPage> {
                             ),
                           );
                         },
-                        icon: const Icon(Icons.directions_walk),
-                        label: const Text('Walk'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1B5E20),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
+                      child: _buildEarnOptionCard(
+                        context,
+                        icon: Icons.directions_bus,
+                        title: 'Public Transport',
+                        subtitle: 'Use public transport to earn atoms',
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -457,12 +503,6 @@ class _CarbonCreditsPageState extends ConsumerState<CarbonCreditsPage> {
                             ),
                           );
                         },
-                        icon: const Icon(Icons.directions_bus),
-                        label: const Text('Public Transport'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1B5E20),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
                       ),
                     ),
                   ],
@@ -716,5 +756,54 @@ class _CarbonCreditsPageState extends ConsumerState<CarbonCreditsPage> {
       // For very small numbers, use scientific notation
       return number.toStringAsFixed(3);
     }
+  }
+
+  Widget _buildEarnOptionCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.grey.shade200),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                icon,
+                size: 32,
+                color: const Color(0xFF1B5E20),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

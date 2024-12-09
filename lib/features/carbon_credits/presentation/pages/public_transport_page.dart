@@ -42,6 +42,7 @@ class _PublicTransportPageState extends ConsumerState<PublicTransportPage> {
       if (mounted) {
         setState(() {
           _pendingTicketData = jsonResponse;
+          _isProcessing = false; // Reset processing state for new ticket
         });
       }
     });
@@ -56,14 +57,26 @@ class _PublicTransportPageState extends ConsumerState<PublicTransportPage> {
 
     try {
       final user = ref.read(authStateProvider).value;
-      if (user == null) return;
+      if (user == null) {
+        setState(() {
+          _pendingTicketData = null;
+          _isProcessing = false;
+        });
+        return;
+      }
 
       final userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(user.id)
           .get();
 
-      if (!userDoc.exists) return;
+      if (!userDoc.exists) {
+        setState(() {
+          _pendingTicketData = null;
+          _isProcessing = false;
+        });
+        return;
+      }
 
       final distanceToOffice =
           userDoc.data()?['distanceToOffice'] as double? ?? 0;
@@ -117,31 +130,33 @@ class _PublicTransportPageState extends ConsumerState<PublicTransportPage> {
       });
 
       // Clear the pending ticket data to hide the confirmation UI
-      setState(() {
-        _pendingTicketData = null;
-        _isProcessing = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Bus ticket processed! Earned ${carbonCredits.toStringAsFixed(3)} carbon credits'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to process ticket. Please try again.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      // Ensure processing state is reset even if there's an error
       if (mounted) {
         setState(() {
+          _pendingTicketData = null;
           _isProcessing = false;
         });
+
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Bus ticket processed! Earned ${carbonCredits.toStringAsFixed(3)} carbon credits'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _pendingTicketData = null;
+          _isProcessing = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to process ticket. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
   }
@@ -235,6 +250,7 @@ class _PublicTransportPageState extends ConsumerState<PublicTransportPage> {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         ImageToJsonWidget(
+                          key: ValueKey(_pendingTicketData == null),
                           customPrompt:
                               "Give distance travelled in km in JSON response, it should be in the format of {'distance': 10} and it is found after the text : KMs ussualy ",
                           onJsonResult: _handleBusTicket,
@@ -312,7 +328,7 @@ class _PublicTransportPageState extends ConsumerState<PublicTransportPage> {
                           title: Text(
                               'Bus Trip - ${distance.toStringAsFixed(1)} km'),
                           subtitle: Text(
-                              '${credits.toStringAsFixed(3)} credits earned\n${timestamp.toString().split('.')[0]}'),
+                              '${(credits * 1000).toStringAsFixed(2)} atoms earned\n${timestamp.toString().split('.')[0]}'),
                           isThreeLine: true,
                         ),
                       );
