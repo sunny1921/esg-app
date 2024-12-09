@@ -26,14 +26,21 @@ mixin _$UserModel {
   String get mobile => throw _privateConstructorUsedError;
   String get postOfficeId => throw _privateConstructorUsedError;
   String get pincode => throw _privateConstructorUsedError;
+  bool get isEmployee => throw _privateConstructorUsedError;
+  bool get isProfileComplete => throw _privateConstructorUsedError;
+  double get carbonCredits => throw _privateConstructorUsedError;
   String? get employeeRole => throw _privateConstructorUsedError;
   String? get gender => throw _privateConstructorUsedError;
   bool? get isPhysicallyChallenged => throw _privateConstructorUsedError;
   String? get casteCategory => throw _privateConstructorUsedError;
   String? get employmentType => throw _privateConstructorUsedError;
   String? get vendorName => throw _privateConstructorUsedError;
-  bool get isEmployee => throw _privateConstructorUsedError;
-  bool get isProfileComplete => throw _privateConstructorUsedError;
+  List<String>? get responsibilities => throw _privateConstructorUsedError;
+  double? get homeLatitude => throw _privateConstructorUsedError;
+  double? get homeLongitude => throw _privateConstructorUsedError;
+  double? get distanceToOffice => throw _privateConstructorUsedError;
+  double? get vehicleMileage => throw _privateConstructorUsedError;
+  String? get vehicleType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -53,14 +60,21 @@ abstract class $UserModelCopyWith<$Res> {
       String mobile,
       String postOfficeId,
       String pincode,
+      bool isEmployee,
+      bool isProfileComplete,
+      double carbonCredits,
       String? employeeRole,
       String? gender,
       bool? isPhysicallyChallenged,
       String? casteCategory,
       String? employmentType,
       String? vendorName,
-      bool isEmployee,
-      bool isProfileComplete});
+      List<String>? responsibilities,
+      double? homeLatitude,
+      double? homeLongitude,
+      double? distanceToOffice,
+      double? vehicleMileage,
+      String? vehicleType});
 }
 
 /// @nodoc
@@ -82,14 +96,21 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? mobile = null,
     Object? postOfficeId = null,
     Object? pincode = null,
+    Object? isEmployee = null,
+    Object? isProfileComplete = null,
+    Object? carbonCredits = null,
     Object? employeeRole = freezed,
     Object? gender = freezed,
     Object? isPhysicallyChallenged = freezed,
     Object? casteCategory = freezed,
     Object? employmentType = freezed,
     Object? vendorName = freezed,
-    Object? isEmployee = null,
-    Object? isProfileComplete = null,
+    Object? responsibilities = freezed,
+    Object? homeLatitude = freezed,
+    Object? homeLongitude = freezed,
+    Object? distanceToOffice = freezed,
+    Object? vehicleMileage = freezed,
+    Object? vehicleType = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -116,6 +137,18 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.pincode
           : pincode // ignore: cast_nullable_to_non_nullable
               as String,
+      isEmployee: null == isEmployee
+          ? _value.isEmployee
+          : isEmployee // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isProfileComplete: null == isProfileComplete
+          ? _value.isProfileComplete
+          : isProfileComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
+      carbonCredits: null == carbonCredits
+          ? _value.carbonCredits
+          : carbonCredits // ignore: cast_nullable_to_non_nullable
+              as double,
       employeeRole: freezed == employeeRole
           ? _value.employeeRole
           : employeeRole // ignore: cast_nullable_to_non_nullable
@@ -140,14 +173,30 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.vendorName
           : vendorName // ignore: cast_nullable_to_non_nullable
               as String?,
-      isEmployee: null == isEmployee
-          ? _value.isEmployee
-          : isEmployee // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isProfileComplete: null == isProfileComplete
-          ? _value.isProfileComplete
-          : isProfileComplete // ignore: cast_nullable_to_non_nullable
-              as bool,
+      responsibilities: freezed == responsibilities
+          ? _value.responsibilities
+          : responsibilities // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      homeLatitude: freezed == homeLatitude
+          ? _value.homeLatitude
+          : homeLatitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      homeLongitude: freezed == homeLongitude
+          ? _value.homeLongitude
+          : homeLongitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      distanceToOffice: freezed == distanceToOffice
+          ? _value.distanceToOffice
+          : distanceToOffice // ignore: cast_nullable_to_non_nullable
+              as double?,
+      vehicleMileage: freezed == vehicleMileage
+          ? _value.vehicleMileage
+          : vehicleMileage // ignore: cast_nullable_to_non_nullable
+              as double?,
+      vehicleType: freezed == vehicleType
+          ? _value.vehicleType
+          : vehicleType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -167,14 +216,21 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String mobile,
       String postOfficeId,
       String pincode,
+      bool isEmployee,
+      bool isProfileComplete,
+      double carbonCredits,
       String? employeeRole,
       String? gender,
       bool? isPhysicallyChallenged,
       String? casteCategory,
       String? employmentType,
       String? vendorName,
-      bool isEmployee,
-      bool isProfileComplete});
+      List<String>? responsibilities,
+      double? homeLatitude,
+      double? homeLongitude,
+      double? distanceToOffice,
+      double? vehicleMileage,
+      String? vehicleType});
 }
 
 /// @nodoc
@@ -194,14 +250,21 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? mobile = null,
     Object? postOfficeId = null,
     Object? pincode = null,
+    Object? isEmployee = null,
+    Object? isProfileComplete = null,
+    Object? carbonCredits = null,
     Object? employeeRole = freezed,
     Object? gender = freezed,
     Object? isPhysicallyChallenged = freezed,
     Object? casteCategory = freezed,
     Object? employmentType = freezed,
     Object? vendorName = freezed,
-    Object? isEmployee = null,
-    Object? isProfileComplete = null,
+    Object? responsibilities = freezed,
+    Object? homeLatitude = freezed,
+    Object? homeLongitude = freezed,
+    Object? distanceToOffice = freezed,
+    Object? vehicleMileage = freezed,
+    Object? vehicleType = freezed,
   }) {
     return _then(_$UserModelImpl(
       id: null == id
@@ -228,6 +291,18 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.pincode
           : pincode // ignore: cast_nullable_to_non_nullable
               as String,
+      isEmployee: null == isEmployee
+          ? _value.isEmployee
+          : isEmployee // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isProfileComplete: null == isProfileComplete
+          ? _value.isProfileComplete
+          : isProfileComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
+      carbonCredits: null == carbonCredits
+          ? _value.carbonCredits
+          : carbonCredits // ignore: cast_nullable_to_non_nullable
+              as double,
       employeeRole: freezed == employeeRole
           ? _value.employeeRole
           : employeeRole // ignore: cast_nullable_to_non_nullable
@@ -252,14 +327,30 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.vendorName
           : vendorName // ignore: cast_nullable_to_non_nullable
               as String?,
-      isEmployee: null == isEmployee
-          ? _value.isEmployee
-          : isEmployee // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isProfileComplete: null == isProfileComplete
-          ? _value.isProfileComplete
-          : isProfileComplete // ignore: cast_nullable_to_non_nullable
-              as bool,
+      responsibilities: freezed == responsibilities
+          ? _value._responsibilities
+          : responsibilities // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      homeLatitude: freezed == homeLatitude
+          ? _value.homeLatitude
+          : homeLatitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      homeLongitude: freezed == homeLongitude
+          ? _value.homeLongitude
+          : homeLongitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      distanceToOffice: freezed == distanceToOffice
+          ? _value.distanceToOffice
+          : distanceToOffice // ignore: cast_nullable_to_non_nullable
+              as double?,
+      vehicleMileage: freezed == vehicleMileage
+          ? _value.vehicleMileage
+          : vehicleMileage // ignore: cast_nullable_to_non_nullable
+              as double?,
+      vehicleType: freezed == vehicleType
+          ? _value.vehicleType
+          : vehicleType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -274,14 +365,22 @@ class _$UserModelImpl implements _UserModel {
       required this.mobile,
       required this.postOfficeId,
       required this.pincode,
+      this.isEmployee = false,
+      this.isProfileComplete = false,
+      this.carbonCredits = 0,
       this.employeeRole,
       this.gender,
       this.isPhysicallyChallenged,
       this.casteCategory,
       this.employmentType,
       this.vendorName,
-      this.isEmployee = false,
-      this.isProfileComplete = false});
+      final List<String>? responsibilities,
+      this.homeLatitude,
+      this.homeLongitude,
+      this.distanceToOffice,
+      this.vehicleMileage,
+      this.vehicleType})
+      : _responsibilities = responsibilities;
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -299,6 +398,15 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String pincode;
   @override
+  @JsonKey()
+  final bool isEmployee;
+  @override
+  @JsonKey()
+  final bool isProfileComplete;
+  @override
+  @JsonKey()
+  final double carbonCredits;
+  @override
   final String? employeeRole;
   @override
   final String? gender;
@@ -310,16 +418,31 @@ class _$UserModelImpl implements _UserModel {
   final String? employmentType;
   @override
   final String? vendorName;
+  final List<String>? _responsibilities;
   @override
-  @JsonKey()
-  final bool isEmployee;
+  List<String>? get responsibilities {
+    final value = _responsibilities;
+    if (value == null) return null;
+    if (_responsibilities is EqualUnmodifiableListView)
+      return _responsibilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
-  @JsonKey()
-  final bool isProfileComplete;
+  final double? homeLatitude;
+  @override
+  final double? homeLongitude;
+  @override
+  final double? distanceToOffice;
+  @override
+  final double? vehicleMileage;
+  @override
+  final String? vehicleType;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, mobile: $mobile, postOfficeId: $postOfficeId, pincode: $pincode, employeeRole: $employeeRole, gender: $gender, isPhysicallyChallenged: $isPhysicallyChallenged, casteCategory: $casteCategory, employmentType: $employmentType, vendorName: $vendorName, isEmployee: $isEmployee, isProfileComplete: $isProfileComplete)';
+    return 'UserModel(id: $id, name: $name, email: $email, mobile: $mobile, postOfficeId: $postOfficeId, pincode: $pincode, isEmployee: $isEmployee, isProfileComplete: $isProfileComplete, carbonCredits: $carbonCredits, employeeRole: $employeeRole, gender: $gender, isPhysicallyChallenged: $isPhysicallyChallenged, casteCategory: $casteCategory, employmentType: $employmentType, vendorName: $vendorName, responsibilities: $responsibilities, homeLatitude: $homeLatitude, homeLongitude: $homeLongitude, distanceToOffice: $distanceToOffice, vehicleMileage: $vehicleMileage, vehicleType: $vehicleType)';
   }
 
   @override
@@ -334,6 +457,12 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.postOfficeId, postOfficeId) ||
                 other.postOfficeId == postOfficeId) &&
             (identical(other.pincode, pincode) || other.pincode == pincode) &&
+            (identical(other.isEmployee, isEmployee) ||
+                other.isEmployee == isEmployee) &&
+            (identical(other.isProfileComplete, isProfileComplete) ||
+                other.isProfileComplete == isProfileComplete) &&
+            (identical(other.carbonCredits, carbonCredits) ||
+                other.carbonCredits == carbonCredits) &&
             (identical(other.employeeRole, employeeRole) ||
                 other.employeeRole == employeeRole) &&
             (identical(other.gender, gender) || other.gender == gender) &&
@@ -345,30 +474,46 @@ class _$UserModelImpl implements _UserModel {
                 other.employmentType == employmentType) &&
             (identical(other.vendorName, vendorName) ||
                 other.vendorName == vendorName) &&
-            (identical(other.isEmployee, isEmployee) ||
-                other.isEmployee == isEmployee) &&
-            (identical(other.isProfileComplete, isProfileComplete) ||
-                other.isProfileComplete == isProfileComplete));
+            const DeepCollectionEquality()
+                .equals(other._responsibilities, _responsibilities) &&
+            (identical(other.homeLatitude, homeLatitude) ||
+                other.homeLatitude == homeLatitude) &&
+            (identical(other.homeLongitude, homeLongitude) ||
+                other.homeLongitude == homeLongitude) &&
+            (identical(other.distanceToOffice, distanceToOffice) ||
+                other.distanceToOffice == distanceToOffice) &&
+            (identical(other.vehicleMileage, vehicleMileage) ||
+                other.vehicleMileage == vehicleMileage) &&
+            (identical(other.vehicleType, vehicleType) ||
+                other.vehicleType == vehicleType));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      email,
-      mobile,
-      postOfficeId,
-      pincode,
-      employeeRole,
-      gender,
-      isPhysicallyChallenged,
-      casteCategory,
-      employmentType,
-      vendorName,
-      isEmployee,
-      isProfileComplete);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        name,
+        email,
+        mobile,
+        postOfficeId,
+        pincode,
+        isEmployee,
+        isProfileComplete,
+        carbonCredits,
+        employeeRole,
+        gender,
+        isPhysicallyChallenged,
+        casteCategory,
+        employmentType,
+        vendorName,
+        const DeepCollectionEquality().hash(_responsibilities),
+        homeLatitude,
+        homeLongitude,
+        distanceToOffice,
+        vehicleMileage,
+        vehicleType
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -392,14 +537,21 @@ abstract class _UserModel implements UserModel {
       required final String mobile,
       required final String postOfficeId,
       required final String pincode,
+      final bool isEmployee,
+      final bool isProfileComplete,
+      final double carbonCredits,
       final String? employeeRole,
       final String? gender,
       final bool? isPhysicallyChallenged,
       final String? casteCategory,
       final String? employmentType,
       final String? vendorName,
-      final bool isEmployee,
-      final bool isProfileComplete}) = _$UserModelImpl;
+      final List<String>? responsibilities,
+      final double? homeLatitude,
+      final double? homeLongitude,
+      final double? distanceToOffice,
+      final double? vehicleMileage,
+      final String? vehicleType}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -417,6 +569,12 @@ abstract class _UserModel implements UserModel {
   @override
   String get pincode;
   @override
+  bool get isEmployee;
+  @override
+  bool get isProfileComplete;
+  @override
+  double get carbonCredits;
+  @override
   String? get employeeRole;
   @override
   String? get gender;
@@ -429,9 +587,17 @@ abstract class _UserModel implements UserModel {
   @override
   String? get vendorName;
   @override
-  bool get isEmployee;
+  List<String>? get responsibilities;
   @override
-  bool get isProfileComplete;
+  double? get homeLatitude;
+  @override
+  double? get homeLongitude;
+  @override
+  double? get distanceToOffice;
+  @override
+  double? get vehicleMileage;
+  @override
+  String? get vehicleType;
   @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>

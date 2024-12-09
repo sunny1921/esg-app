@@ -15,7 +15,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   void initState() {
     super.initState();
     Future(() {
-      ref.read(bottomNavVisibilityProvider.notifier).state = false;
+      ref.read(bottomNavVisibilityProvider.notifier).hide();
+      ref.read(navigationProvider.notifier).reset();
     });
     _navigateToNextScreen();
   }
@@ -38,7 +39,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // TODO: Add Post Office Logo
             const CircleAvatar(
               radius: 50,
               backgroundColor: Color(0xFF1B5E20),

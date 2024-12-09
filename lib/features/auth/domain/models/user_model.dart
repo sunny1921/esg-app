@@ -12,16 +12,23 @@ class UserModel with _$UserModel {
     required String mobile,
     required String postOfficeId,
     required String pincode,
+    @Default(false) bool isEmployee,
+    @Default(false) bool isProfileComplete,
+    @Default(0) double carbonCredits,
     String? employeeRole,
     String? gender,
     bool? isPhysicallyChallenged,
     String? casteCategory,
     String? employmentType,
     String? vendorName,
-    @Default(false) bool isEmployee,
-    @Default(false) bool isProfileComplete,
+    List<String>? responsibilities,
+    double? homeLatitude,
+    double? homeLongitude,
+    double? distanceToOffice,
+    double? vehicleMileage,
+    String? vehicleType,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
-} 
+}

@@ -16,8 +16,10 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    Future(() {
-      ref.read(bottomNavVisibilityProvider.notifier).state = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      debugPrint('Setting bottom nav visibility to true from DashboardPage');
+      ref.read(bottomNavVisibilityProvider.notifier).show();
+      ref.read(navigationProvider.notifier).reset();
     });
   }
 
@@ -76,16 +78,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
         );
       },
-      loading: () => const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      error: (error, stackTrace) => Scaffold(
-        body: Center(
-          child: Text('Error: $error'),
-        ),
-      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => const SignInPage(),
     );
   }
 

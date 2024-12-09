@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:esg_post_office/features/auth/presentation/providers/auth_provider.dart';
 import 'package:esg_post_office/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:restart_app/restart_app.dart';
 
 class CompleteProfilePage extends ConsumerStatefulWidget {
   const CompleteProfilePage({super.key});
@@ -73,6 +74,8 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
             vendorName: _vendorName,
             responsibilities: _selectedResponsibilities,
           );
+
+      Restart.restartApp();
 
       if (!mounted) return;
       Navigator.of(context).pushReplacement(

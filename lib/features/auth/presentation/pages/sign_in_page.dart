@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:esg_post_office/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:esg_post_office/features/auth/presentation/providers/auth_provider.dart';
 import 'package:esg_post_office/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:restart_app/restart_app.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
@@ -22,8 +23,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   @override
   void initState() {
     super.initState();
-    Future(() {
-      ref.read(bottomNavVisibilityProvider.notifier).state = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(bottomNavVisibilityProvider.notifier).hide();
     });
   }
 
@@ -46,6 +47,11 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           );
 
       if (!mounted) return;
+
+      ref.read(bottomNavVisibilityProvider.notifier).show();
+      ref.read(navigationProvider.notifier).reset();
+      Restart.restartApp();
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const DashboardPage(),
@@ -65,42 +71,23 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 48),
-                // TODO: Add Post Office Logo
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Color(0xFF1B5E20),
-                  child: Icon(
-                    Icons.local_post_office,
-                    size: 50,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Text(
+                const Text(
                   'Welcome Back',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: const Color(0xFF1B5E20),
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Sign in to continue',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 32),
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(
@@ -111,9 +98,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Please enter a valid email';
                     }
                     return null;
                   },

@@ -29,5 +29,10 @@ abstract class AuthRepository {
     String? employmentType,
     String? vendorName,
     List<String>? responsibilities,
+    double? homeLatitude,
+    double? homeLongitude,
+    double? distanceToOffice,
+    double? vehicleMileage,
+    String? vehicleType,
   });
 }

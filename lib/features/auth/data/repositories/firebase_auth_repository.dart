@@ -87,6 +87,11 @@ class FirebaseAuthRepository implements AuthRepository {
     String? employmentType,
     String? vendorName,
     List<String>? responsibilities,
+    double? homeLatitude,
+    double? homeLongitude,
+    double? distanceToOffice,
+    double? vehicleMileage,
+    String? vehicleType,
   }) async {
     try {
       final updates = {
@@ -100,6 +105,11 @@ class FirebaseAuthRepository implements AuthRepository {
         if (employmentType != null) 'employmentType': employmentType,
         if (vendorName != null) 'vendorName': vendorName,
         if (responsibilities != null) 'responsibilities': responsibilities,
+        if (homeLatitude != null) 'homeLatitude': homeLatitude,
+        if (homeLongitude != null) 'homeLongitude': homeLongitude,
+        if (distanceToOffice != null) 'distanceToOffice': distanceToOffice,
+        if (vehicleMileage != null) 'vehicleMileage': vehicleMileage,
+        if (vehicleType != null) 'vehicleType': vehicleType,
       };
 
       await _firestore.collection('users').doc(userId).update(updates);
