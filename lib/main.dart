@@ -2,6 +2,7 @@ import 'package:esg_post_office/core/providers/navigation_provider.dart';
 import 'package:esg_post_office/features/auth/presentation/providers/auth_provider.dart';
 import 'package:esg_post_office/features/carbon_credits/presentation/pages/carbon_credits_page.dart';
 import 'package:esg_post_office/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:esg_post_office/features/record/presentation/pages/record_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,7 +68,7 @@ class MyApp extends ConsumerWidget {
               index: currentIndex,
               children: const [
                 DashboardPage(),
-                Scaffold(body: Center(child: Text('Record Page'))),
+                RecordPage(),
                 Scaffold(body: Center(child: Text('Notifications Page'))),
                 CarbonCreditsPage(),
               ],

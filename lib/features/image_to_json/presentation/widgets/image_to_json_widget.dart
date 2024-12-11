@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../providers/image_to_json_provider.dart';
 
-class ImageToJsonWidget extends ConsumerWidget {
+class ImageToJsonWidget extends ConsumerStatefulWidget {
   final String customPrompt;
   final void Function(Map<String, dynamic> json)? onJsonResult;
 
@@ -14,26 +14,56 @@ class ImageToJsonWidget extends ConsumerWidget {
     this.onJsonResult,
   });
 
-  Future<void> _pickImage(ImageSource source, WidgetRef ref) async {
+  @override
+  ConsumerState<ImageToJsonWidget> createState() => _ImageToJsonWidgetState();
+}
+
+class _ImageToJsonWidgetState extends ConsumerState<ImageToJsonWidget> {
+  @override
+  void didUpdateWidget(ImageToJsonWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final state = ref.read(imageToJsonProvider);
+    if (state.result != null && widget.onJsonResult != null) {
+      widget.onJsonResult!(state.result!.jsonResponse);
+    }
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
       await ref.read(imageToJsonProvider.notifier).processImage(
             imageFile: File(pickedFile.path),
-            customPrompt: customPrompt,
+            customPrompt: widget.customPrompt,
           );
     }
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(imageToJsonProvider);
+  Widget _buildImageSourceButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback? onTap,
+    required BuildContext context,
+  }) {
+    return Expanded(
+      child: ElevatedButton.icon(
+        onPressed: onTap,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        icon: Icon(icon),
+        label: Text(label),
+      ),
+    );
+  }
 
-    // Call the callback when result is available
-    if (state.result != null && onJsonResult != null) {
-      onJsonResult!(state.result!.jsonResponse);
-    }
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(imageToJsonProvider);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -55,7 +85,7 @@ class ImageToJsonWidget extends ConsumerWidget {
                     label: 'Camera',
                     onTap: state.isLoading
                         ? null
-                        : () => _pickImage(ImageSource.camera, ref),
+                        : () => _pickImage(ImageSource.camera),
                     context: context,
                   ),
                   const SizedBox(width: 16),
@@ -64,7 +94,7 @@ class ImageToJsonWidget extends ConsumerWidget {
                     label: 'Gallery',
                     onTap: state.isLoading
                         ? null
-                        : () => _pickImage(ImageSource.gallery, ref),
+                        : () => _pickImage(ImageSource.gallery),
                     context: context,
                   ),
                 ],
@@ -138,27 +168,6 @@ class ImageToJsonWidget extends ConsumerWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildImageSourceButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback? onTap,
-    required BuildContext context,
-  }) {
-    return Expanded(
-      child: ElevatedButton.icon(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        icon: Icon(icon),
-        label: Text(label),
       ),
     );
   }

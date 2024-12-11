@@ -9,7 +9,8 @@ class CompleteProfilePage extends ConsumerStatefulWidget {
   const CompleteProfilePage({super.key});
 
   @override
-  ConsumerState<CompleteProfilePage> createState() => _CompleteProfilePageState();
+  ConsumerState<CompleteProfilePage> createState() =>
+      _CompleteProfilePageState();
 }
 
 class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
@@ -49,7 +50,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
   final List<String> _availableResponsibilities = [
     'electricity',
     'water',
-    'fleet',
+    'fuel',
     'others'
   ];
   final List<String> _selectedResponsibilities = [];
@@ -237,7 +238,8 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                 ],
                 const SizedBox(height: 16),
                 const Text('Responsibilities:', style: TextStyle(fontSize: 16)),
-                ...(_availableResponsibilities.map((responsibility) => CheckboxListTile(
+                ...(_availableResponsibilities.map((responsibility) =>
+                    CheckboxListTile(
                       title: Text(responsibility),
                       value: _selectedResponsibilities.contains(responsibility),
                       onChanged: (bool? value) {
@@ -267,4 +269,4 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
       ),
     );
   }
-} 
+}
