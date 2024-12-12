@@ -44,10 +44,11 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_svg: ^2.0.9
   loading_animation_widget: ^1.2.0+4
+  qr_code_scanner: ^1.0.1
 
   # Utilities
-  freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
   logger: ^2.0.2+1
   http: ^1.2.2
   
@@ -67,9 +68,9 @@ dev_dependencies:
     sdk: flutter
   
   # Code Generation
-  build_runner: ^2.4.7
-  freezed: ^2.4.5
-  json_serializable: ^6.7.1
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
   riverpod_generator: ^2.3.9
   
   flutter_lints: ^3.0.0

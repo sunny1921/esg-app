@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:esg_post_office/features/auth/presentation/providers/auth_provider.dart';
 import 'package:esg_post_office/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:esg_post_office/core/widgets/app_drawer.dart';
+import 'package:esg_post_office/features/qr_scanner/screens/qr_scanner_screen.dart';
+import 'package:esg_post_office/features/dashboard/providers/utility_bills_provider.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -51,6 +53,16 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             ],
           ),
           drawer: AppDrawer(user: user),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const QRScannerScreen(),
+                ),
+              );
+            },
+            child: const Icon(Icons.qr_code_scanner),
+          ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -98,30 +110,44 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildMetricItem(
-                    icon: Icons.electric_bolt,
-                    title: 'Electricity',
-                    value: '150 kWh',
+            Consumer(
+              builder: (context, ref, child) {
+                final utilityBillsAsync = ref.watch(utilityBillsNotifierProvider);
+                
+                return utilityBillsAsync.when(
+                  data: (bills) => Row(
+                    children: [
+                      Expanded(
+                        child: _buildMetricItem(
+                          icon: Icons.electric_bolt,
+                          title: 'Electricity',
+                          value: '${bills['electricity']?.toStringAsFixed(2) ?? '0'} kWh',
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildMetricItem(
+                          icon: Icons.water_drop,
+                          title: 'Water',
+                          value: '${bills['water']?.toStringAsFixed(2) ?? '0'} L',
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildMetricItem(
+                          icon: Icons.local_shipping,
+                          title: 'Fuel',
+                          value: '${bills['fuel']?.toStringAsFixed(2) ?? '0'} L',
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: _buildMetricItem(
-                    icon: Icons.water_drop,
-                    title: 'Water',
-                    value: '45 L',
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
                   ),
-                ),
-                Expanded(
-                  child: _buildMetricItem(
-                    icon: Icons.local_shipping,
-                    title: 'Fleet',
-                    value: '25 km',
+                  error: (error, stack) => Center(
+                    child: Text('Error: $error'),
                   ),
-                ),
-              ],
+                );
+              },
             ),
           ],
         ),

@@ -22,10 +22,6 @@ class _ImageToJsonWidgetState extends ConsumerState<ImageToJsonWidget> {
   @override
   void didUpdateWidget(ImageToJsonWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final state = ref.read(imageToJsonProvider);
-    if (state.result != null && widget.onJsonResult != null) {
-      widget.onJsonResult!(state.result!.jsonResponse);
-    }
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -37,6 +33,11 @@ class _ImageToJsonWidgetState extends ConsumerState<ImageToJsonWidget> {
             imageFile: File(pickedFile.path),
             customPrompt: widget.customPrompt,
           );
+      
+      final state = ref.read(imageToJsonProvider);
+      if (state.result != null && widget.onJsonResult != null) {
+        widget.onJsonResult!(state.result!.jsonResponse);
+      }
     }
   }
 

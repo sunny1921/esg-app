@@ -30,36 +30,66 @@ Example output:
 }
 ''';
 
-  void _handleJsonResult(Map<String, dynamic> data) {
+  Key _imageToJsonKey = UniqueKey();
+  Map<String, dynamic>? _pendingBillData;
+  bool _isProcessing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Reset state when page is opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        ref.read(waterBillProvider.notifier)
-          ..setLoading(false)
-          ..setBillData(data);
-      }
+      ref.read(waterBillProvider.notifier).reset();
     });
   }
 
+  @override
+  void dispose() {
+    // Reset state when page is closed
+    ref.read(waterBillProvider.notifier).reset();
+    super.dispose();
+  }
+
+  void _handleJsonResult(Map<String, dynamic> data) {
+    debugPrint('Received OCR data: $data'); // Debug log
+    
+    if (!mounted) return;
+    
+    // Update state immediately
+    setState(() {
+      _pendingBillData = data;
+      _isProcessing = false;
+    });
+    
+    // Force a rebuild after a short delay to ensure UI updates
+    Future.microtask(() {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    
+    debugPrint('State updated - pendingBillData: $_pendingBillData, isProcessing: $_isProcessing');
+  }
+
   Future<void> _submitBill() async {
-    final billState = ref.read(waterBillProvider);
-    final authState = ref.read(authStateProvider);
-    final billsService = ref.read(billsServiceProvider);
+    if (_pendingBillData == null || _isProcessing) return;
+
+    setState(() {
+      _isProcessing = true;
+    });
 
     try {
-      if (billState.billData == null) {
-        throw Exception('No bill data available');
-      }
+      final authState = ref.read(authStateProvider);
+      final billsService = ref.read(billsServiceProvider);
 
       final user = authState.value;
       if (user == null) {
         throw Exception('User not authenticated');
       }
 
-      ref.read(waterBillProvider.notifier).setLoading(true);
-
       await billsService.submitWaterBill(
         postOfficeId: user.postOfficeId,
-        billData: billState.billData!,
+        billData: _pendingBillData!,
       );
 
       if (mounted) {
@@ -69,28 +99,31 @@ Example output:
             backgroundColor: Colors.green,
           ),
         );
-        ref.read(waterBillProvider.notifier).reset();
+        setState(() {
+          _pendingBillData = null;
+          _isProcessing = false;
+          _imageToJsonKey = UniqueKey(); // Force rebuild of ImageToJsonWidget
+        });
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(e.toString()),
+            content: Text('Error: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
-      }
-    } finally {
-      if (mounted) {
-        ref.read(waterBillProvider.notifier).setLoading(false);
+        setState(() {
+          _isProcessing = false;
+        });
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final billState = ref.watch(waterBillProvider);
-
+    debugPrint('Building WaterBillPage - pendingBillData: $_pendingBillData, isProcessing: $_isProcessing'); // Debug build state
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Water Bill Record'),
@@ -100,15 +133,11 @@ Example output:
         child: Column(
           children: [
             ImageToJsonWidget(
+              key: _imageToJsonKey,
               customPrompt: _promptForWaterBill,
               onJsonResult: _handleJsonResult,
             ),
-            if (billState.error != null)
-              Text(
-                billState.error!,
-                style: const TextStyle(color: Colors.red),
-              ),
-            if (billState.billData != null) ...[
+            if (_pendingBillData != null) ...[
               const SizedBox(height: 20),
               const Text(
                 'Extracted Data:',
@@ -117,10 +146,10 @@ Example output:
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
-                  itemCount: billState.billData!.length,
+                  itemCount: _pendingBillData!.length,
                   itemBuilder: (context, index) {
-                    String key = billState.billData!.keys.elementAt(index);
-                    dynamic value = billState.billData![key];
+                    String key = _pendingBillData!.keys.elementAt(index);
+                    dynamic value = _pendingBillData![key];
                     return ListTile(
                       title: Text(key),
                       subtitle: Text(value.toString()),
@@ -133,22 +162,21 @@ Example output:
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: billState.billData == null || billState.isProcessing || billState.isUploading
-                    ? null 
-                    : _submitBill,
+                onPressed: _pendingBillData == null || _isProcessing ? null : _submitBill,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   backgroundColor: Theme.of(context).primaryColor,
+                  disabledBackgroundColor: Colors.grey.shade400,
                 ),
-                child: billState.isProcessing || billState.isUploading
+                child: _isProcessing
                     ? const SizedBox(
                         height: 20,
                         width: 20,
                         child: CircularProgressIndicator(color: Colors.white),
                       )
-                    : const Text(
-                        'Submit Bill',
-                        style: TextStyle(
+                    : Text(
+                        _pendingBillData == null ? 'Upload Bill First' : 'Submit Bill',
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                         ),

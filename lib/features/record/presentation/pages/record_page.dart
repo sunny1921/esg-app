@@ -62,6 +62,18 @@ class RecordPage extends ConsumerWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            _BillTypeCard(
+              title: 'Switch ON/OFF',
+              icon: Icons.qr_code_scanner_rounded,
+              color: Colors.orange,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FuelBillPage(),
+                ),
+              ),
+            ),
           ],
         ),
       ),
