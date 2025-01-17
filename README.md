@@ -1,16 +1,42 @@
-# esg_post_office
+# ESG Post Office
 
-A new Flutter project.
+<p align="center">
+  <img src="assets/logo.png" alt="ESG Post Office Logo" width="200"/>
+</p>
 
-## Getting Started
+[![Flutter Version](https://img.shields.io/badge/Flutter-3.4.3-blue.svg)](https://flutter.dev/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-This project is a starting point for a Flutter application.
+A comprehensive Flutter application for tracking and managing environmental sustainability metrics in post offices. This project aims to help postal services monitor and reduce their carbon footprint through various sustainability initiatives.
 
-A few resources to get you started if this is your first Flutter project:
+## 🌟 Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Bill Management**
+  - Electricity consumption tracking
+  - Water usage monitoring
+  - Fuel consumption analytics
+  - Solar panel integration
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Carbon Credits**
+  - Real-time carbon footprint calculation
+  - CO₂ savings tracking
+  - Environmental impact analytics
+
+- **Dashboard**
+  - Comprehensive overview of sustainability metrics
+  - Real-time alerts and notifications
+  - Performance trends and analytics
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Flutter SDK ≥ 3.4.3
+- Dart SDK ≥ 3.0.0
+- Firebase account
+- OpenAI API key (for AI features)
+
+### Installation
+
+1. Clone the repository:

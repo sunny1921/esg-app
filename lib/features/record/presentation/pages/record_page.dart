@@ -1,3 +1,4 @@
+import 'package:esg_post_office/features/record/presentation/pages/solar_panel_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:esg_post_office/features/record/presentation/pages/electricity_bill_page.dart';
@@ -64,13 +65,13 @@ class RecordPage extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             _BillTypeCard(
-              title: 'Switch ON/OFF',
+              title: 'Solar Panel',
               icon: Icons.qr_code_scanner_rounded,
               color: Colors.orange,
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const FuelBillPage(),
+                  builder: (context) => const SolarPanelPage(),
                 ),
               ),
             ),
